@@ -556,11 +556,18 @@ class Thumb(object):
         self._dir = folder
         self._filesize = size
         self._lastmod = lastmod
+        self._caption = ''
         self._captionbreaks = []
         self._image = wx.Image(1, 1)
         self._alpha = None
         self._imagehandler = imagehandler()
         self._bitmap = None
+        self._originalsize = None
+
+
+    def HasAlpha(self):
+        """ Returns whether Thumb has alpha. """
+        return self._alpha
 
 
     def SetCaption(self, caption=""):
@@ -791,7 +798,7 @@ class Thumb(object):
         """ Returns info for thumbnain in display format. """
         thumbinfo = "Name: " + self.GetFileName() + "\n" \
                     "Size: " + self.GetDisplayFileSize() + "\n" \
-                    "Modified: " + self.GetCreationDate() + "\n" \
+                    "Modified: " + str(self.GetCreationDate()) + "\n" \
                     "Dimensions: " + str(self.GetOriginalSize()) + "\n"
         return thumbinfo
 
@@ -1592,7 +1599,7 @@ class ScrolledThumbnail(wx.ScrolledWindow):
                           int(y + (self._tHeight - img.GetHeight())/2),
                           img.GetWidth(), img.GetHeight())
 
-        if not thumb._alpha and self._dropShadow:
+        if not thumb.GetAlpha() and self._dropShadow:
             dc.Blit(imgRect.x+5, imgRect.y+5, imgRect.width, imgRect.height, self.shadow, 500-ww, 500-hh)
         dc.DrawBitmap(img, imgRect.x, imgRect.y, True)
 
